@@ -98,3 +98,10 @@ button[type="reset"]:hover {
   background: rgb(150, 7, 7);
   box-shadow: 0px 0px 10px 5px rgba(150, 7, 7, 0.63);
 }
+
+.textboxes{
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  text-align: center;
+}
