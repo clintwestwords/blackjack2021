@@ -63,7 +63,6 @@ let populate = (decks) =>{
                         }
                         
                         
-                        
                         j = tmp
                         
                         
@@ -128,7 +127,7 @@ let checkAce = (hand)=>{
 
 
 
-populate(500)
+populate(1)
 
 let player = document.querySelector('#player-hand')
 let dealer = document.querySelector('#dealer-hand')
@@ -141,37 +140,51 @@ let bank = document.querySelector('#money')
 let betBox = document.querySelector('#current-bet')
 let table = document.querySelector('.table')
 let yourHand = document.querySelector('#yourHand')
+let deckAmount = document.querySelector('#decks')
 
+let decks = 1
 
 let dealer1 = cardPicker()
 let dealer2 = cardPicker()
 let player1 = cardPicker()
 let player2 = cardPicker()
-let score = 0
 
+let score = 0
 
 let playersCards = []
 let dealersCards = []
-let splitCards = []
 
-let bet = 500
+let bet = 0
 let money = 500
 
 
 bank.textContent = `Money: ${money}`
 betBox.textContent = `Bet: ${bet}`
-
+deckAmount.textContent = `Decks: ${decks}`
 
 buttons.innerHTML = `<button id=\"increase-button\" type=\"button\">Increase bet</button>\
 <button id=\"decrease-button\" type=\"button\">Decrease Bet</button> 
-<button id=\"place bet-button\" type=\"button\">Place Bet</button>`
-
-
+<button id=\"place bet-button\" type=\"button\">Place Bet</button>
+<button id="deckInc-button" type="button">Increase Decks</button>
+<button id="deckDec-button" type="button">Decrease Decks</button>`
 
 
 buttons.addEventListener('click', e=>{
-    
-    
+
+    if(e.target.id == "deckInc-button"){
+        decks += 1
+        cards = []
+        populate(decks)
+        console.log(`Quantitiy of cards in cards[]:${cards.length}`)
+    }
+
+    if(e.target.id == "deckDec-button"){
+        decks -= 1
+        cards = []
+        populate(decks)
+        console.log(`Quantitiy of cards in cards[]:${cards.length}`)
+    }
+
     if(e.target.id == "increase-button"){
         
         bet += 5
@@ -210,23 +223,14 @@ buttons.addEventListener('click', e=>{
                 playerScore.textContent = score + playersCards[i].value
             }
         }
-        
-        if(playersCards[0].value == playersCards[1].value){
-            
-            buttons.innerHTML += `<button id="split-button" type="button">Split</button>`
-
-        }
     }
     
         bank.textContent = `Money: ${money}`
         betBox.textContent = `Bet: ${bet}`
-        
+        deckAmount.textContent = `Decks: ${decks}`
 
-    if(e.target.id == "split-button"){
-        
-        
-  
-    }
+
+
 
     if(e.target.id == "reset-button"){
         
@@ -238,7 +242,8 @@ buttons.addEventListener('click', e=>{
         player.innerHTML = ""
         dealer.innerHTML = ""
         messages.textContent=""
-        populate(1)
+        cards = []
+        populate(decks)
         dealer1 = cardPicker()
         dealer2 = cardPicker()
         player1 = cardPicker()
@@ -246,7 +251,9 @@ buttons.addEventListener('click', e=>{
         
         buttons.innerHTML = `<button id=\"increase-button\"type=\"button\">Increase bet</button>
         <button id=\"decrease-button\" type=\"button\">Decrease Bet</button> 
-        <button id=\"place bet-button\" type=\"button\">Place Bet</button>`
+        <button id=\"place bet-button\" type=\"button\">Place Bet</button>
+        <button id="deckInc-button" type="button">Increase Decks</button>
+        <button id="deckDec-button" type="button">Decrease Decks</button>`
     }
     
 
@@ -378,8 +385,26 @@ buttons.addEventListener('click', e=>{
         }
         else if(dealerPoints > 21 && parseInt(playerScore.textContent) <= 21){
             
-            messages.textContent = 'You Win!'
+            messages.textContent = 'You\'re Winner!!'
             money += bet
+        }
+        else if(dealerPoints == parseInt(playerScore.textContent)){
+            
+            messages.textContent = 'It\'s a draw!'
+        }
+        
+        else if(dealerPoints > 21 && parseInt(playerScore.textContent) > 21){
+
+            if(dealerPoints < parseInt(playerScore.textContent)){
+
+                messages.textContent = 'The Dealer Wins!'
+                money -= bet
+            }
+            else{
+
+                messages.textContent = 'You\'re Winner!'
+                money += bet
+            }
         }
         else if(dealerPoints > parseInt(playerScore.textContent)){
             
@@ -388,14 +413,9 @@ buttons.addEventListener('click', e=>{
         }
         else if(dealerPoints < parseInt(playerScore.textContent)){
             
-            messages.textContent = 'You Win!'
+            messages.textContent = 'You\'re Winner!'
             money += bet
         }
-        else if(dealerPoints == parseInt(playerScore.textContent)){
-            
-            messages.textContent = 'It\'s a draw!'
-        }
-        
         bank.textContent = `Money: ${money}`
         betBox.textContent = `Bet: ${bet}`
         
